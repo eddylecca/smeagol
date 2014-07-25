@@ -6,6 +6,10 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 // Add these import statements:
 use Smeagol\Model\Node;
 use Smeagol\Model\NodeTable;
+use Smeagol\Model\User;
+use Smeagol\Model\UserTable;
+use Smeagol\Model\Menu;
+use Smeagol\Model\MenuTable;
 use Admin\Model\Page;
 use Admin\Model\Noticia;
 use Zend\Db\ResultSet\ResultSet;
@@ -41,7 +45,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
 					$table = new NodeTable($tableGateway);
 					return $table;
 				},
-				'NodeTableGateway' => function ($sm) {
+                                'Smeagol\Model\MenuTable' => function($sm) {
+                                        $tableGateway = $sm->get('MenuTableGateway');
+                                        $table = new MenuTable($tableGateway);
+                                        return $table;
+                                },
+                                'MenuTableGateway' => function ($sm) {
+                                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                                        $resultSetPrototype = new ResultSet();
+                                        $resultSetPrototype->setArrayObjectPrototype(new Menu());
+                                        return new TableGateway('menu', $dbAdapter, null, $resultSetPrototype);
+                                },
+                                'NodeTableGateway' => function ($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Node());
