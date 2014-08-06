@@ -5,8 +5,6 @@ return array(
         'AssetManager',
         'Application',
         'Admin',
-        'Page',
-        'Noticia',
 
     ),
 

@@ -206,7 +206,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
 
             $acceso = false;
 
-            // verificación de acceso al recurso
+            // verificación de acceso al recurso actual
             $resource = "mvc:$module.$controller.$action";
             if ($acl->isAllowed($userRole, $resource)) {
                 $acceso = true;

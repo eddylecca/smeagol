@@ -55,7 +55,7 @@ INSERT INTO `menu` (`id`, `name`, `label`, `url`, `parent_id`, `order_id`, `node
 (10, NULL, 'Contáctenos', NULL, 1, 5, 9),
 (11, NULL, 'Dashboard', 'admin', 2, 0, NULL),
 (12, NULL, 'Contenido', 'admin/page', 2, 1, NULL),
-(13, NULL, 'Noticias', 'admin/noticias', 2, 2, NULL),
+(13, NULL, 'Noticias', 'admin/noticia', 2, 2, NULL),
 (14, NULL, 'Menus', 'admin/menus', 2, 3, NULL),
 (15, NULL, 'Temas', 'admin/themes', 2, 4, NULL),
 (16, NULL, 'Usuarios', 'admin/users', 2, 5, NULL),
@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS `node` (
 
 INSERT INTO `node` (`id`, `title`, `content`, `url`, `created`, `modified`, `node_type_id`, `user_id`) VALUES
 (1, 'Nosotros', '<p><strong>Smeagol CMS, un</strong><strong>&nbsp;demo de desarrolado en Zend Framework 2</strong></p>\r\n\r\n<p>Nosotros somos hinchas de Zend Framework 2</p>\r\n\r\n<p>Gurus del php&nbsp;</p>\r\n\r\n<p>que deasrrollamos aplicaciones alucinantes</p>\r\n', 'nosotros', '2014-07-01 20:47:24', '2014-07-17 13:56:17', 1, 1),
-(2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticias/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
-(3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticias/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
+(2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticia/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
+(3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticia/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
 (4, 'Programación Web', '<p>Somos unos tigres del PHP y dem&aacute;s hierbas</p>\r\n', 'servicios/programacion-web', '2014-07-10 22:47:08', '2014-07-17 13:50:46', 1, 1),
 (5, 'Servicios', '<p>Somos Expertos Programadores y le ofrecemos los siguientes servicios</p>\r\n\r\n<p><a href="/servicios/programacion-web">Programaci&oacute;n web</a>&nbsp;</p>\r\n\r\n<p><a href="/servicios/desarrollo-de-portales">Desarrollo de Portales</a></p>\r\n', 'servicios', '2014-07-17 13:50:18', '2014-07-17 13:50:18', 1, 1),
 (6, 'Desarrollo de Portales', '<p>Creamos portales con smeagol y drupal&nbsp;</p>\r\n', 'servicios/desarrollo-de-portales', '2014-07-17 13:52:35', '2014-07-17 13:52:35', 1, 1),
