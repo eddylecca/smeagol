@@ -1,10 +1,9 @@
-﻿##############################################################################################
 -- phpMyAdmin SQL Dump
 -- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-08-2014 a las 23:39:27
+-- Tiempo de generación: 05-08-2014 a las 19:16:07
 -- Versión del servidor: 5.5.36
 -- Versión de PHP: 5.4.27
 
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `node_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_menu_node1_idx` (`node_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Volcado de datos para la tabla `menu`
@@ -83,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `node` (
   PRIMARY KEY (`id`),
   KEY `fk_node_node_type1_idx` (`node_type_id`),
   KEY `fk_node_user1_idx` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Volcado de datos para la tabla `node`
@@ -112,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `node_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `node_type`
@@ -132,23 +131,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `resource` varchar(250) NOT NULL,
   `description` varchar(250) NOT NULL,
   PRIMARY KEY (`resource`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `permission`
---
-
-INSERT INTO `permission` (`resource`, `description`) VALUES
-('mvc:admin', 'Acceso Total al módulo de administración'),
-('mvc:admin.index.index', 'Acceso al dashboard del módulo Admin'),
-('mvc:admin.pages', 'Acceso Total para gestionar páginas estáticas'),
-('mvc:admin.pages.add', 'Crear nuevas páginas estáticas'),
-('mvc:admin.pages.delete', 'Borrar cualquier página estática'),
-('mvc:admin.pages.delete:owner', 'Borrar solo páginas que es dueño el usuario '),
-('mvc:admin.pages.edit', 'Editar páginas estáticas'),
-('mvc:admin.pages.edit:owner', 'Editar sólo páginas estáticas de la que es dueño el usuario'),
-('mvc:admin.pages.index', 'Lista de páginas estáticas en el módulo de Administración'),
-('mvc:application', 'Acceso al Módulo público, todos los controladores');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -160,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   `type` varchar(30) NOT NULL,
   `description` varchar(250) NOT NULL,
   PRIMARY KEY (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `role`
@@ -170,7 +153,7 @@ INSERT INTO `role` (`type`, `description`) VALUES
 ('admin', 'Usuarios Administradores, todos los permisos'),
 ('editor', 'Usuarios con el rol de editor, por defecto puede crear, editar y borrar todos los contenidos'),
 ('guest', 'Usuarios anónimos, por defecto pueden acceder a todos los contenidos'),
-('user', 'Usuarios Autenticados, por defecto pueden editar su propio contenido');
+('member', 'Usuarios Autenticados, por defecto pueden editar su propio contenido');
 
 -- --------------------------------------------------------
 
@@ -181,28 +164,10 @@ INSERT INTO `role` (`type`, `description`) VALUES
 CREATE TABLE IF NOT EXISTS `role_permission` (
   `role_type` varchar(30) NOT NULL,
   `permission_resource` varchar(250) NOT NULL,
-  `unchanged` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`role_type`,`permission_resource`),
-  KEY `fk_role_has_permission_permission1_idx` (`permission_resource`),
-  KEY `fk_role_has_permission_role1_idx` (`role_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `role_permission`
---
-
-INSERT INTO `role_permission` (`role_type`, `permission_resource`, `unchanged`) VALUES
-('admin', 'mvc:admin', 1),
-('admin', 'mvc:application', 1),
-('editor', 'mvc:admin.index.index', 0),
-('editor', 'mvc:application', 0),
-('guest', 'mvc:application', 1),
-('user', 'mvc:admin.index.index', 0),
-('user', 'mvc:admin.pages.add', 0),
-('user', 'mvc:admin.pages.delete:owner', 0),
-('user', 'mvc:admin.pages.edit:owner', 0),
-('user', 'mvc:admin.pages.index', 0),
-('user', 'mvc:application', 0);
+  KEY `fk_role_permission_role1_idx` (`role_type`),
+  KEY `fk_role_permission_permission1_idx` (`permission_resource`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -223,14 +188,16 @@ CREATE TABLE IF NOT EXISTS `user` (
   `role_type` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_role_idx` (`role_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `surname`, `email`, `active`, `last_login`, `modified`, `role_type`) VALUES
-(1, 'admin', 'c6865cf98b133f1f3de596a4a2894630', 'Admin', 'of Universe', 'tucorreo@gmail.com', 1, NULL, '2014-07-01 20:47:24', 'admin');
+(1, 'admin', 'c6865cf98b133f1f3de596a4a2894630', 'Admin', 'of Universe', 'tucorreo@gmail.com', 1, NULL, '2014-07-01 20:47:24', 'admin'),
+(2, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'editor'),
+(3, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, NULL, NULL, 'editor');
 
 --
 -- Restricciones para tablas volcadas
@@ -253,8 +220,8 @@ ALTER TABLE `node`
 -- Filtros para la tabla `role_permission`
 --
 ALTER TABLE `role_permission`
-  ADD CONSTRAINT `fk_role_has_permission_permission1` FOREIGN KEY (`permission_resource`) REFERENCES `permission` (`resource`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_role_has_permission_role1` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_role_permission_role1` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_role_permission_permission1` FOREIGN KEY (`permission_resource`) REFERENCES `permission` (`resource`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `user`

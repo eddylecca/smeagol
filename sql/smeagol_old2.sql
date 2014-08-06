@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS `node` (
 
 INSERT INTO `node` (`id`, `node_type_id`, `title`, `content`, `url`, `user_id`, `created`, `modified`) VALUES
 (1, 1, 'Smeagol CMS', '<p>Smeagol CMS, un demo de desarrolado en Zend Framework 3</p>\r\n', 'page/nosotros', 1, '2014-07-02 01:10:41', '2014-07-12 05:37:55'),
-(2, 2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticias/smeagol-primer-cms-en-zf2', 1, '2014-07-02 01:10:45', NULL),
-(3, 2, 'El mundial Brasil 2014 esta que quema', 'ELl mundial esta super emocionante', 'noticias/mundialsuper-emocionante', 1, '2014-07-02 01:10:52', NULL),
+(2, 2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticia/smeagol-primer-cms-en-zf2', 1, '2014-07-02 01:10:45', NULL),
+(3, 2, 'El mundial Brasil 2014 esta que quema', 'ELl mundial esta super emocionante', 'noticia/mundialsuper-emocionante', 1, '2014-07-02 01:10:52', NULL),
 (4, 1, 'Programación Web', '<p><strong>Programaci&oacute;n Web</strong></p>\r\n\r\n<p>Ejemplo de creaci&oacute;n de p&aacute;ginas 2</p>\r\n', 'page/programacion-web', 1, '2014-07-12 04:50:32', '2014-07-12 05:42:33');
 
 -- --------------------------------------------------------

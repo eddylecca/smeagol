@@ -17,7 +17,7 @@ INSERT INTO node (id,node_type_id,title,content,url,user_id,created)
 VALUES(NULL,1,"Smeagol CMS","Smeagol CMS, un demo de desarrolado en Zend Framework 2","/smeagol",1,NOW());
 
 INSERT INTO node (id,node_type_id,title,content,url,user_id,created) 
-VALUES(NULL,2,"Smeagol primer CMS en ZF2","haber si funca","/noticias/smeagol-primer-cms-en-zf2",1,NOW());
+VALUES(NULL,2,"Smeagol primer CMS en ZF2","haber si funca","/noticia/smeagol-primer-cms-en-zf2",1,NOW());
 
 INSERT INTO node (id,node_type_id,title,content,url,user_id,created) 
-VALUES(NULL,2,"El mundial Brasil 2014 esta que quema","ELl mundial esta super emocionante","/noticias/mundialsuper-emocionante",1,NOW());
+VALUES(NULL,2,"El mundial Brasil 2014 esta que quema","ELl mundial esta super emocionante","/noticia/mundialsuper-emocionante",1,NOW());

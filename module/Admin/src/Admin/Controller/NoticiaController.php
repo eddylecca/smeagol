@@ -193,7 +193,7 @@ class NoticiaController extends AbstractActionController
     public function deleteAction() {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
-            // Redirect to list of noticiass
+            // Redirect to list of noticias
             return $this->redirect()->toRoute('admin', array(
                         'controller' => 'noticia',
                         'action' => 'index'
