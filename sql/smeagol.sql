@@ -1,3 +1,32 @@
+﻿##############################################################################################
+-- phpMyAdmin SQL Dump
+-- version 4.1.12
+-- http://www.phpmyadmin.net
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 03-08-2014 a las 23:39:27
+-- Versión del servidor: 5.5.36
+-- Versión de PHP: 5.4.27
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de datos: `smeagol`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `menu`
+--
+
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -31,8 +60,8 @@ INSERT INTO `menu` (`id`, `name`, `label`, `url`, `parent_id`, `order_id`, `node
 (14, NULL, 'Menus', 'admin/menus', 2, 3, NULL),
 (15, NULL, 'Temas', 'admin/themes', 2, 4, NULL),
 (16, NULL, 'Usuarios', 'admin/users', 2, 5, NULL),
-(17, NULL, 'Permisos', 'admin/permissions', 16, 0, NULL),
-(18, NULL, 'Roles', 'admin/roles', 17, 0, NULL),
+(17, NULL, 'Permisos', 'admin/permissions', 16, 1, NULL),
+(18, NULL, 'Roles', 'admin/roles', 16, 0, NULL),
 (19, NULL, 'Smeagol CMS', NULL, 7, 0, 10),
 (20, NULL, 'Drupal CMS', NULL, 7, 1, 11);
 
@@ -63,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `node` (
 INSERT INTO `node` (`id`, `title`, `content`, `url`, `created`, `modified`, `node_type_id`, `user_id`) VALUES
 (1, 'Nosotros', '<p><strong>Smeagol CMS, un</strong><strong>&nbsp;demo de desarrolado en Zend Framework 2</strong></p>\r\n\r\n<p>Nosotros somos hinchas de Zend Framework 2</p>\r\n\r\n<p>Gurus del php&nbsp;</p>\r\n\r\n<p>que deasrrollamos aplicaciones alucinantes</p>\r\n', 'nosotros', '2014-07-01 20:47:24', '2014-07-17 13:56:17', 1, 1),
 (2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticias/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
-(3, 'El mundial Brasil 2014 esta que quema', 'ELl mundial esta super emocionante', 'noticias/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
+(3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticias/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
 (4, 'Programación Web', '<p>Somos unos tigres del PHP y dem&aacute;s hierbas</p>\r\n', 'servicios/programacion-web', '2014-07-10 22:47:08', '2014-07-17 13:50:46', 1, 1),
 (5, 'Servicios', '<p>Somos Expertos Programadores y le ofrecemos los siguientes servicios</p>\r\n\r\n<p><a href="/servicios/programacion-web">Programaci&oacute;n web</a>&nbsp;</p>\r\n\r\n<p><a href="/servicios/desarrollo-de-portales">Desarrollo de Portales</a></p>\r\n', 'servicios', '2014-07-17 13:50:18', '2014-07-17 13:50:18', 1, 1),
 (6, 'Desarrollo de Portales', '<p>Creamos portales con smeagol y drupal&nbsp;</p>\r\n', 'servicios/desarrollo-de-portales', '2014-07-17 13:52:35', '2014-07-17 13:52:35', 1, 1),
-(7, 'Soluciones', '<p>Hacemos desarrollo de software a medida y contamos con las siguientes soluciones</p>\r\n\r\n<p><a href="/soluciones/smeagolcms">Smeagol CMS</a></p>\r\n\r\n<p><a href="/soluciones/intranets">Intranets</a></p>\r\n', 'soluciones/intranets', '2014-07-17 13:54:35', '2014-07-17 13:54:35', 1, 1),
+(7, 'Soluciones', '<p><img alt="" src="/files/fotos/puesta-de-sol.jpg" style="float:left; height:141px; width:188px" />Hacemos desarrollo de software a medida y contamos con las siguientes soluciones</p>\r\n\r\n<p><a href="/soluciones/smeagolcms">Smeagol CMS</a></p>\r\n\r\n<p><a href="/soluciones/intranets">Intranets</a></p>\r\n', 'soluciones/intranets', '2014-07-17 13:54:35', '2014-08-03 19:41:00', 1, 1),
 (8, 'Soporte', '<p>Brindamos el mejor soporte al mejor precio</p>\r\n\r\n<p>en planes</p>\r\n\r\n<p>8x5</p>\r\n\r\n<p>24x7</p>\r\n', 'soporte', '2014-07-17 13:58:17', '2014-07-17 13:58:17', 1, 1),
 (9, 'Contactenos', '<p>Cont&aacute;ctenos y no se arrepentir&aacute;</p>\r\n\r\n<p>al fono &nbsp;666-666-666</p>\r\n', 'contactenos', '2014-07-17 13:59:13', '2014-07-17 13:59:13', 1, 1),
 (10, 'Smeagol', '<h1>El mejor CMS en Zend Frammework 2  :D</h1>', 'servicios/desarrollo-de-portales/smeagol', '2014-07-22 08:05:00', NULL, 1, 1),
@@ -96,6 +125,34 @@ INSERT INTO `node_type` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `permission`
+--
+
+CREATE TABLE IF NOT EXISTS `permission` (
+  `resource` varchar(250) NOT NULL,
+  `description` varchar(250) NOT NULL,
+  PRIMARY KEY (`resource`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `permission`
+--
+
+INSERT INTO `permission` (`resource`, `description`) VALUES
+('mvc:admin', 'Acceso Total al módulo de administración'),
+('mvc:admin.index.index', 'Acceso al dashboard del módulo Admin'),
+('mvc:admin.pages', 'Acceso Total para gestionar páginas estáticas'),
+('mvc:admin.pages.add', 'Crear nuevas páginas estáticas'),
+('mvc:admin.pages.delete', 'Borrar cualquier página estática'),
+('mvc:admin.pages.delete:owner', 'Borrar solo páginas que es dueño el usuario '),
+('mvc:admin.pages.edit', 'Editar páginas estáticas'),
+('mvc:admin.pages.edit:owner', 'Editar sólo páginas estáticas de la que es dueño el usuario'),
+('mvc:admin.pages.index', 'Lista de páginas estáticas en el módulo de Administración'),
+('mvc:application', 'Acceso al Módulo público, todos los controladores');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `role`
 --
 
@@ -110,9 +167,42 @@ CREATE TABLE IF NOT EXISTS `role` (
 --
 
 INSERT INTO `role` (`type`, `description`) VALUES
-('admin', 'Admin User'),
-('editor', 'User with rol of editor'),
-('user', 'Every Authenticate User');
+('admin', 'Usuarios Administradores, todos los permisos'),
+('editor', 'Usuarios con el rol de editor, por defecto puede crear, editar y borrar todos los contenidos'),
+('guest', 'Usuarios anónimos, por defecto pueden acceder a todos los contenidos'),
+('user', 'Usuarios Autenticados, por defecto pueden editar su propio contenido');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `role_permission`
+--
+
+CREATE TABLE IF NOT EXISTS `role_permission` (
+  `role_type` varchar(30) NOT NULL,
+  `permission_resource` varchar(250) NOT NULL,
+  `unchanged` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`role_type`,`permission_resource`),
+  KEY `fk_role_has_permission_permission1_idx` (`permission_resource`),
+  KEY `fk_role_has_permission_role1_idx` (`role_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `role_permission`
+--
+
+INSERT INTO `role_permission` (`role_type`, `permission_resource`, `unchanged`) VALUES
+('admin', 'mvc:admin', 1),
+('admin', 'mvc:application', 1),
+('editor', 'mvc:admin.index.index', 0),
+('editor', 'mvc:application', 0),
+('guest', 'mvc:application', 1),
+('user', 'mvc:admin.index.index', 0),
+('user', 'mvc:admin.pages.add', 0),
+('user', 'mvc:admin.pages.delete:owner', 0),
+('user', 'mvc:admin.pages.edit:owner', 0),
+('user', 'mvc:admin.pages.index', 0),
+('user', 'mvc:application', 0);
 
 -- --------------------------------------------------------
 
@@ -158,6 +248,13 @@ ALTER TABLE `menu`
 ALTER TABLE `node`
   ADD CONSTRAINT `fk_node_node_type1` FOREIGN KEY (`node_type_id`) REFERENCES `node_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_node_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `role_permission`
+--
+ALTER TABLE `role_permission`
+  ADD CONSTRAINT `fk_role_has_permission_permission1` FOREIGN KEY (`permission_resource`) REFERENCES `permission` (`resource`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_role_has_permission_role1` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `user`
