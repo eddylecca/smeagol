@@ -38,7 +38,8 @@ class MenuTable {
      * @param bolean $include_itself boleano que indica si se incluye o no el id buscado en menuTree
      * @return array 
      */
-    public function getNavigationArray($parent_id = 0, $path = "", $menuTree = array(), $include_itself = false) {
+    
+   public function getNavigationArray($parent_id = 0, $path = "", $menuTree = array(), $include_itself = false) {
 
         $parent_id = (int) $parent_id;
         if ($include_itself) {
@@ -78,13 +79,16 @@ class MenuTable {
 
         foreach ($resultSet as $menu) {
             $route = "home";
+            $module = "application";
             $controller = "";
             $action = "";
+            $resource = "mvc:application.index.index";
 
             if (empty($menu['node_id'])) {
                 if ($menu['urlmenu'] != '/') {
                     $m = explode("/", $menu['urlmenu']);
                     $route = $m[0];
+                    $module = $m[0];
                     if (!empty($m[1])) {
                         $controller = $m[1];
                     } else {
@@ -95,15 +99,17 @@ class MenuTable {
                     } else {
                         $action = "index";
                     }
+                    $resource = "mvc:$module.$controller.$action";
                 }
             } else {
                 $route = "node";
+                $module = "application";
             }
 
             $page = array('id' => $menu['id'],
                 'label' => $menu['label'],
-                'route' => $route);
-
+                'route' => $route,
+                'module' => $module);
 
             if (!empty($controller)) {
                 $page['controller'] = $controller;
@@ -111,9 +117,15 @@ class MenuTable {
                     $page['action'] = $action;
                 }
             } else {
-                $page['params'] = array('id' => $menu['id'], 'link' => "/".$menu['urlnode']);
+                if ($route != "home") {
+                    $resource = "mvc:application.index.node";
+                }
+                $page['params'] = array('id' => $menu['id'], 'link' => "/" . $menu['urlnode']);
             }
 
+            if (!empty($resource)) {
+                $page['resource'] = $resource;
+            }
 
             if (empty($path)) {
                 $menuTree[] = $page;
@@ -123,13 +135,10 @@ class MenuTable {
                 $pt = explode(":", $path);
                 $temp = & $menuTree;
                 foreach ($pt as $p) {
-                    //print_r($temp);
                     if (!empty($p)) {
                         $temp = &$temp[$p];
                     }
                 }
-                //echo $path."\n";	
-
                 $temp["pages"]["menu" . $menu['id']] = $page;
                 end($temp["pages"]);
                 $last_key = "pages:" . key($temp["pages"]) . ":";

@@ -230,6 +230,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
             $e->getViewModel()->setTemplate($layout);
             $e->getViewModel()->setVariable("is_login", $is_login);
             $e->getViewModel()->setVariable("is_front", $is_front);
+            $e->getViewModel()->setVariable("acl", $acl);
         });
     }
 
