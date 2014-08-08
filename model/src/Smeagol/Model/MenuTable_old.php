@@ -29,7 +29,7 @@ class MenuTable {
         return $row;
     }
 
-    /**
+   /**
      * Método que genera el array Zend\Navigation a partir de la tabla menu en base a un id base de menú .
      * 
      * @param int $parent_id id de menú a partir de donde se extraerá el arbol
@@ -38,7 +38,8 @@ class MenuTable {
      * @param bolean $include_itself boleano que indica si se incluye o no el id buscado en menuTree
      * @return array 
      */
-    public function getNavigationArray($parent_id = 0, $path = "", $menuTree = array(), $include_itself = false) {
+    
+   public function getNavigationArray($parent_id = 0, $path = "", $menuTree = array(), $include_itself = false) {
 
         $parent_id = (int) $parent_id;
         if ($include_itself) {
@@ -147,4 +148,7 @@ class MenuTable {
         }
         return $menuTree;
     }
+
 }
+
+

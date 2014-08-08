@@ -1,8 +1,9 @@
 <?php
+
 namespace Admin;
+
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-
 // Add these import statements:
 use Smeagol\Model\Node;
 use Smeagol\Model\NodeTable;

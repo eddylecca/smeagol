@@ -1,5 +1,4 @@
 <?php
-
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -9,10 +8,13 @@ use Zend\Soap\AutoDiscover;
 use Smeagol\Service\Hello;
 
 class SoapController extends AbstractActionController {
+
     public function nowsdlAction() {
+        $uri = $this->getRequest()->getUri();
+        $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
         $hello = new Hello();
-        $options = array('location' => 'http://www.smeagol.com/soap/nowsdl',
-            'uri' => 'http://www.smeagol.com/soap/nowsdl');
+        $options = array('location' => $base . '/soap/nowsdl',
+            'uri' => $base . '/soap/nowsdl');
 
         // Instancia del Soap Server; null establece que no se usa un descriptor wsdl
         $server = new Server(null, $options);
@@ -26,25 +28,30 @@ class SoapController extends AbstractActionController {
     }
 
     public function test1Action() {
-        $options = array('location' => 'http://www.smeagol.com/soap/nowsdl',
-            'uri' => 'http://www.smeagol.com/soap/nowsdl');
-        
+        $uri = $this->getRequest()->getUri();
+        $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
+
+        $options = array('location' => $base . '/soap/nowsdl',
+            'uri' => $base.'/soap/nowsdl');
+
         // Instancia de Soap Client, null establece que no se usa un descriptor wsdl
         $client = new Client(null, $options);
-        
+
         // Invocando al método remoto sayHello
         echo $client->sayHello("Mundo!");
         return $this->getResponse();
     }
-    
-    
+
     // método que genera el archivo wsdl
     public function autodiscoverWsdlAction() {
+        $uri = $this->getRequest()->getUri();
+        $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
+
         $autodiscover = new AutoDiscover();
         // definiendo la clase para generar su wsdl y el 
         // enlace del soap server
         $autodiscover->setClass("\Smeagol\Service\Hello")
-                ->setUri('http://www.smeagol.com/soap/withwsdl');
+                ->setUri($base.'/soap/withwsdl');
         // Se imprime el XML del descriptor WSDL
         $autodiscover->handle();
         // se deshabilita la vista
@@ -52,8 +59,11 @@ class SoapController extends AbstractActionController {
     }
 
     public function withWsdlAction() {
+        $uri = $this->getRequest()->getUri();
+        $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
+
         // La instancia del soap server tiene que hacerse con el url del archivo wsdl
-        $server = new Server("http://www.smeagol.com/soap/autodiscoverwsdl");
+        $server = new Server($base."/soap/autodiscoverwsdl");
         // Se define la clase desplegada en el web service
         $server->setClass("\Smeagol\Service\Hello");
         // Se despliega el web service
@@ -62,10 +72,13 @@ class SoapController extends AbstractActionController {
     }
 
     public function test2Action() {
-        $options = array('location' => 'http://www.smeagol.com/soap/withwsdl',
-            'uri' => 'http://www.smeagol.com/soap/withwsdl');
+        $uri = $this->getRequest()->getUri();
+        $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
+
+        $options = array('location' => $base.'/soap/withwsdl',
+            'uri' => $base.'/soap/withwsdl');
         // Se instancia el cliente con el enlace del descriptor wsdl
-        $client = new Client('http://www.smeagol.com/soap/autodiscoverwsdl', $options);
+        $client = new Client($base.'/soap/autodiscoverwsdl', $options);
         // se invoca al método remoto
         echo $client->sayHello("Mundo!");
         return $this->getResponse();
