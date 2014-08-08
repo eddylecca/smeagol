@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-08-2014 a las 19:16:07
+-- Tiempo de generación: 05-08-2014 a las 22:51:14
 -- Versión del servidor: 5.5.36
 -- Versión de PHP: 5.4.27
 
@@ -55,7 +55,7 @@ INSERT INTO `menu` (`id`, `name`, `label`, `url`, `parent_id`, `order_id`, `node
 (10, NULL, 'Contáctenos', NULL, 1, 5, 9),
 (11, NULL, 'Dashboard', 'admin', 2, 0, NULL),
 (12, NULL, 'Contenido', 'admin/page', 2, 1, NULL),
-(13, NULL, 'Noticias', 'admin/noticia', 2, 2, NULL),
+(13, NULL, 'Noticias', 'admin/noticias', 2, 2, NULL),
 (14, NULL, 'Menus', 'admin/menus', 2, 3, NULL),
 (15, NULL, 'Temas', 'admin/themes', 2, 4, NULL),
 (16, NULL, 'Usuarios', 'admin/users', 2, 5, NULL),
@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS `node` (
 
 INSERT INTO `node` (`id`, `title`, `content`, `url`, `created`, `modified`, `node_type_id`, `user_id`) VALUES
 (1, 'Nosotros', '<p><strong>Smeagol CMS, un</strong><strong>&nbsp;demo de desarrolado en Zend Framework 2</strong></p>\r\n\r\n<p>Nosotros somos hinchas de Zend Framework 2</p>\r\n\r\n<p>Gurus del php&nbsp;</p>\r\n\r\n<p>que deasrrollamos aplicaciones alucinantes</p>\r\n', 'nosotros', '2014-07-01 20:47:24', '2014-07-17 13:56:17', 1, 1),
-(2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticia/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
-(3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticia/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
+(2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticias/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
+(3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticias/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
 (4, 'Programación Web', '<p>Somos unos tigres del PHP y dem&aacute;s hierbas</p>\r\n', 'servicios/programacion-web', '2014-07-10 22:47:08', '2014-07-17 13:50:46', 1, 1),
 (5, 'Servicios', '<p>Somos Expertos Programadores y le ofrecemos los siguientes servicios</p>\r\n\r\n<p><a href="/servicios/programacion-web">Programaci&oacute;n web</a>&nbsp;</p>\r\n\r\n<p><a href="/servicios/desarrollo-de-portales">Desarrollo de Portales</a></p>\r\n', 'servicios', '2014-07-17 13:50:18', '2014-07-17 13:50:18', 1, 1),
 (6, 'Desarrollo de Portales', '<p>Creamos portales con smeagol y drupal&nbsp;</p>\r\n', 'servicios/desarrollo-de-portales', '2014-07-17 13:52:35', '2014-07-17 13:52:35', 1, 1),
@@ -133,6 +133,20 @@ CREATE TABLE IF NOT EXISTS `permission` (
   PRIMARY KEY (`resource`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `permission`
+--
+
+INSERT INTO `permission` (`resource`, `description`) VALUES
+('mvc:admin.*', 'Acceso total al módulo de administración'),
+('mvc:admin.index.index', 'Acceso al Dashboard del Admin'),
+('mvc:admin.page.*', 'Acceso total para crear, editar, borrar páginas estáticas de cualquier usuario'),
+('mvc:admin.page.add', 'Crear páginas estáticas'),
+('mvc:admin.page.delete:owner', 'Borrar páginas estáticas que sean propiedad del usuario'),
+('mvc:admin.page.edit:owner', 'Editar páginas estáticas que sean propiedad del usuario'),
+('mvc:admin.page.index', 'Acceso al listado de páginas estáticas'),
+('mvc:application.*', 'Acceso total al módulo público');
+
 -- --------------------------------------------------------
 
 --
@@ -169,6 +183,24 @@ CREATE TABLE IF NOT EXISTS `role_permission` (
   KEY `fk_role_permission_permission1_idx` (`permission_resource`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `role_permission`
+--
+
+INSERT INTO `role_permission` (`role_type`, `permission_resource`) VALUES
+('admin', 'mvc:admin.*'),
+('admin', 'mvc:application.*'),
+('editor', 'mvc:admin.index.index'),
+('editor', 'mvc:admin.page.*'),
+('editor', 'mvc:application.*'),
+('guest', 'mvc:application.*'),
+('member', 'mvc:admin.index.index'),
+('member', 'mvc:admin.page.add'),
+('member', 'mvc:admin.page.delete:owner'),
+('member', 'mvc:admin.page.edit:owner'),
+('member', 'mvc:admin.page.index'),
+('member', 'mvc:application.*');
+
 -- --------------------------------------------------------
 
 --
@@ -196,8 +228,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `surname`, `email`, `active`, `last_login`, `modified`, `role_type`) VALUES
 (1, 'admin', 'c6865cf98b133f1f3de596a4a2894630', 'Admin', 'of Universe', 'tucorreo@gmail.com', 1, NULL, '2014-07-01 20:47:24', 'admin'),
-(2, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'editor'),
-(3, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, NULL, NULL, 'editor');
+(2, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'editor');
 
 --
 -- Restricciones para tablas volcadas
