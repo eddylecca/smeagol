@@ -36,44 +36,6 @@ use Smeagol\Rules\NodeRule;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
 
-    /*
-    public function onBootstrap(MvcEvent $e) {
-        $e->getApplication()->getServiceManager()->get('translator');
-        $eventManager = $e->getApplication()->getEventManager();
-        $app = $e->getApplication();
-        $sm = $app->getServiceManager();
-        $nav = $sm->get('Navigation');        
-        
-        $alias = $sm->get('Application\Router\Alias');
-        $alias->setNavigation($nav);
-
-        
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-        $eventManager->attach('route', function($e) {
-            // verificando si el usuario esta logueado
-            $auth = new AuthenticationService();
-            $is_login = false;
-            if ($auth->hasIdentity()) {
-                $is_login = true;
-            }
-
-            // validamos si entramos en el index del portal
-            $is_front = false;
-            // obtenemos la ruta del request
-            $ruta = $e->getRouter()->getRequestUri()->getPath();
-
-            if ($ruta == "/" || $ruta == "/application" || $ruta === "/application/index" || $ruta === "/application/index/index") {
-                $is_front = true;
-            }
-            // decide which theme to use by get parameter
-            $layout = 'enterprise/layout';
-            $e->getViewModel()->setTemplate($layout);
-            $e->getViewModel()->setVariable("is_login", $is_login);
-            $e->getViewModel()->setVariable("is_front", $is_front);
-        });
-    }
-    */
    public function onBootstrap(MvcEvent $e) {
         $e->getApplication()->getServiceManager()->get('translator');
         $eventManager = $e->getApplication()->getEventManager();
@@ -86,29 +48,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
 
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        /*
-        $eventManager->attach('route', function($e) {
-            // verificando si el usuario esta logueado
-            $auth = new AuthenticationService();
-            $is_login = false;
-            if ($auth->hasIdentity()) {
-                $is_login = true;
-            }
-
-            // validamos si entramos en el index del portal
-            $is_front = false;
-            // obtenemos la ruta del request
-            $ruta = $e->getRouter()->getRequestUri()->getPath();
-            if ($ruta == "/" || $ruta == "/application" || $ruta === "/application/index" || $ruta === "/application/index/index") {
-                $is_front = true;
-            }
-            // decide which theme to use by get parameter
-            $layout = 'enterprise/layout';
-            $e->getViewModel()->setTemplate($layout);
-            $e->getViewModel()->setVariable("is_login", $is_login);
-            $e->getViewModel()->setVariable("is_front", $is_front);
-        });
-         */
         $eventManager->attach('route', function($e) {
             // rol por defecto
             $userRole = 'guest';
@@ -216,6 +155,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
                                             if ($resource == "mvc:$moduleR.$controllerR.$actionR") {
 
                                                 if (isset($routeParams['id'])) {
+                                                    //Obteniendo el id del nodo actual
                                                     $nodeid = (int) $routeParams['id'];
                                                     $nodeRule = $e->getApplication()->getServiceManager()->get('Smeagol\Rules\NodeRule');
 
