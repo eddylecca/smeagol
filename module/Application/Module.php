@@ -20,6 +20,10 @@ use Smeagol\Model\User;
 use Smeagol\Model\UserTable;
 use Smeagol\Model\Menu;
 use Smeagol\Model\MenuTable;
+use Smeagol\Model\Role;
+use Smeagol\Model\RoleTable;
+use Smeagol\Model\RolePermission;
+use Smeagol\Model\RolePermissionTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Authentication\AuthenticationService;
@@ -28,6 +32,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\GenericRole;
 use Zend\Permissions\Acl\Resource\GenericResource;
+use Smeagol\Rules\NodeRule;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
 
@@ -117,8 +122,21 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
                 $userRole = $identity->role_type;
             }
 
+            $roleTable = $e->getApplication()->getServiceManager()->get('Smeagol\Model\RoleTable');
+            $roles = $roleTable->fetchAll();
+
             // Datos se obtendrán de la base de datos
-            $roles = array('guest', 'member', 'editor', 'admin');
+            //$roles = array('guest', 'member', 'editor', 'admin');
+
+            $rolePermissionTable = $e->getApplication()->getServiceManager()->get('Smeagol\Model\RolePermissionTable');
+            $roles_permissions = $rolePermissionTable->fetchAll();
+
+            $permissions = array();
+            foreach ($roles_permissions as $role_permission) {
+                $permissions[$role_permission->role_type][] = $role_permission->permission_resource;
+            }
+
+            /*
             $permissions = array(
                 'admin' => array('mvc:admin.*', 'mvc:application.*'),
                 'guest' => array('mvc:application.*'),
@@ -132,13 +150,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
                     'mvc:admin.pages.delete:owner',
                 )
             );
-
+            */
             // Instanciando la clase Acl
             $acl = new Acl();
 
             // Agregando los roles
             foreach ($roles as $role) {
-                $acl->addRole(new GenericRole($role));
+                $acl->addRole(new GenericRole($role->type));
             }
 
             // Obteniendo los módulos del sistema
@@ -185,6 +203,30 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
                                         $is_allowed = true;
                                     }
 
+                                    if (in_array("$resource:owner", $permission)) {
+
+                                        if ($is_login) {
+                                            $routeParams = $e->getRouteMatch()->getParams();
+                                            $scontroller = trim($routeParams['controller']);
+                                            $rs = explode("\\", $scontroller);
+                                            $moduleR = strtolower($rs[0]);
+                                            $controllerR = strtolower($rs[2]);
+                                            $actionR = strtolower($routeParams['action']);
+
+                                            if ($resource == "mvc:$moduleR.$controllerR.$actionR") {
+
+                                                if (isset($routeParams['id'])) {
+                                                    $nodeid = (int) $routeParams['id'];
+                                                    $nodeRule = $e->getApplication()->getServiceManager()->get('Smeagol\Rules\NodeRule');
+
+                                                    if ($nodeRule->userIsOwner($nodeid, $identity->id)) {
+                                                        $is_allowed = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     // asignado permiso de acceso al recurso
                                     if ($is_allowed) {
                                         $acl->allow($role, $resource);
@@ -203,6 +245,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
             $module = strtolower($rs[0]);
             $controller = strtolower($rs[2]);
             $action = strtolower($routeParams['action']);
+            if (isset($routeParams['id'])) {
+                $id = (int) $routeParams['action'];
+            }
 
             $acceso = false;
 
@@ -280,7 +325,29 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
             $resultSetPrototype->setArrayObjectPrototype(new User());
             return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
         },
-             'Smeagol\Model\MenuTable' => function($sm) {
+                'Smeagol\Model\RoleTable' => function($sm) {
+            $tableGateway = $sm->get('RoleTableGateway');
+            $table = new RoleTable($tableGateway);
+            return $table;
+        },
+                'RoleTableGateway' => function ($sm) {
+            $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+            $resultSetPrototype = new ResultSet();
+            $resultSetPrototype->setArrayObjectPrototype(new Role());
+            return new TableGateway('role', $dbAdapter, null, $resultSetPrototype);
+        },
+                'Smeagol\Model\RolePermissionTable' => function($sm) {
+            $tableGateway = $sm->get('RolePermissionTableGateway');
+            $table = new RolePermissionTable($tableGateway);
+            return $table;
+        },
+                'RolePermissionTableGateway' => function ($sm) {
+            $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+            $resultSetPrototype = new ResultSet();
+            $resultSetPrototype->setArrayObjectPrototype(new RolePermission());
+            return new TableGateway('role_permission', $dbAdapter, null, $resultSetPrototype);
+        },
+                'Smeagol\Model\MenuTable' => function($sm) {
             $tableGateway = $sm->get('MenuTableGateway');
             $table = new MenuTable($tableGateway);
             return $table;
@@ -291,6 +358,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface {
             $resultSetPrototype->setArrayObjectPrototype(new Menu());
             return new TableGateway('menu', $dbAdapter, null, $resultSetPrototype);
         },
+                'Smeagol\Rules\NodeRule' => function($sm) {
+            $tableGateway = $sm->get('NodeTableGateway');
+            $table = new NodeRule($tableGateway);
+            return $table;
+                },
             ),
         );
     }

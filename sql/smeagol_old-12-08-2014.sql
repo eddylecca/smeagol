@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.5
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tiempo de generación: 13-08-2014 a las 03:18:33
--- Versión del servidor: 5.6.16
--- Versión de PHP: 5.5.11
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 05-08-2014 a las 22:51:14
+-- Versión del servidor: 5.5.36
+-- Versión de PHP: 5.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,13 +27,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `menu` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `label` varchar(150) DEFAULT NULL,
   `url` varchar(250) DEFAULT NULL,
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `order_id` int(11) NOT NULL DEFAULT '0',
-  `node_id` int(11) DEFAULT NULL
+  `node_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_menu_node1_idx` (`node_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
@@ -69,14 +71,17 @@ INSERT INTO `menu` (`id`, `name`, `label`, `url`, `parent_id`, `order_id`, `node
 --
 
 CREATE TABLE IF NOT EXISTS `node` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(250) NOT NULL,
   `content` text NOT NULL,
   `url` varchar(250) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   `node_type_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_node_node_type1_idx` (`node_type_id`),
+  KEY `fk_node_user1_idx` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
@@ -84,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `node` (
 --
 
 INSERT INTO `node` (`id`, `title`, `content`, `url`, `created`, `modified`, `node_type_id`, `user_id`) VALUES
-(1, 'Nosotros', '<p><strong>Smeagol CMS, un</strong><strong>&nbsp;demo de desarrolado en Zend Framework 2</strong></p><p>Nosotros somos hinchas de Zend Framework 2</p><p>Gurus del php&nbsp;</p><p>que deasrrollamos aplicaciones alucinantes</p>', 'nosotros', '2014-07-01 20:47:24', '2014-07-17 13:56:17', 1, 3),
+(1, 'Nosotros', '<p><strong>Smeagol CMS, un</strong><strong>&nbsp;demo de desarrolado en Zend Framework 2</strong></p>\r\n\r\n<p>Nosotros somos hinchas de Zend Framework 2</p>\r\n\r\n<p>Gurus del php&nbsp;</p>\r\n\r\n<p>que deasrrollamos aplicaciones alucinantes</p>\r\n', 'nosotros', '2014-07-01 20:47:24', '2014-07-17 13:56:17', 1, 1),
 (2, 'Smeagol primer CMS en ZF2', 'haber si funca', 'noticias/smeagol-primer-cms-en-zf2', '2014-07-01 20:47:24', NULL, 2, 1),
 (3, 'El mundial Brasil 2014 esta que quema', 'El mundial esta super emocionante', 'noticias/mundialsuper-emocionante', '2014-07-01 20:47:24', NULL, 2, 1),
 (4, 'Programación Web', '<p>Somos unos tigres del PHP y dem&aacute;s hierbas</p>\r\n', 'servicios/programacion-web', '2014-07-10 22:47:08', '2014-07-17 13:50:46', 1, 1),
@@ -103,8 +108,9 @@ INSERT INTO `node` (`id`, `title`, `content`, `url`, `created`, `modified`, `nod
 --
 
 CREATE TABLE IF NOT EXISTS `node_type` (
-`id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
@@ -123,7 +129,8 @@ INSERT INTO `node_type` (`id`, `name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `permission` (
   `resource` varchar(250) NOT NULL,
-  `description` varchar(250) NOT NULL
+  `description` varchar(250) NOT NULL,
+  PRIMARY KEY (`resource`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -148,7 +155,8 @@ INSERT INTO `permission` (`resource`, `description`) VALUES
 
 CREATE TABLE IF NOT EXISTS `role` (
   `type` varchar(30) NOT NULL,
-  `description` varchar(250) NOT NULL
+  `description` varchar(250) NOT NULL,
+  PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -169,7 +177,10 @@ INSERT INTO `role` (`type`, `description`) VALUES
 
 CREATE TABLE IF NOT EXISTS `role_permission` (
   `role_type` varchar(30) NOT NULL,
-  `permission_resource` varchar(250) NOT NULL
+  `permission_resource` varchar(250) NOT NULL,
+  PRIMARY KEY (`role_type`,`permission_resource`),
+  KEY `fk_role_permission_role1_idx` (`role_type`),
+  KEY `fk_role_permission_permission1_idx` (`permission_resource`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -197,7 +208,7 @@ INSERT INTO `role_permission` (`role_type`, `permission_resource`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-`id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -206,7 +217,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `active` int(11) DEFAULT '1',
   `last_login` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
-  `role_type` varchar(30) NOT NULL
+  `role_type` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_role_idx` (`role_type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
@@ -215,79 +228,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `surname`, `email`, `active`, `last_login`, `modified`, `role_type`) VALUES
 (1, 'admin', 'c6865cf98b133f1f3de596a4a2894630', 'Admin', 'of Universe', 'tucorreo@gmail.com', 1, NULL, '2014-07-01 20:47:24', 'admin'),
-(2, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'editor'),
-(3, 'eddy', 'c6865cf98b133f1f3de596a4a2894630', 'Eddy', 'Linuxero', 'eddy.lecca@gmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'member');
+(2, 'pepito', 'c6865cf98b133f1f3de596a4a2894630', 'Pepito', 'Linuxero', 'pepito@hotmail.com', 1, '2014-08-04 00:00:00', '2014-08-04 00:00:00', 'editor');
 
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `menu`
---
-ALTER TABLE `menu`
- ADD PRIMARY KEY (`id`), ADD KEY `fk_menu_node1_idx` (`node_id`);
-
---
--- Indices de la tabla `node`
---
-ALTER TABLE `node`
- ADD PRIMARY KEY (`id`), ADD KEY `fk_node_node_type1_idx` (`node_type_id`), ADD KEY `fk_node_user1_idx` (`user_id`);
-
---
--- Indices de la tabla `node_type`
---
-ALTER TABLE `node_type`
- ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `permission`
---
-ALTER TABLE `permission`
- ADD PRIMARY KEY (`resource`);
-
---
--- Indices de la tabla `role`
---
-ALTER TABLE `role`
- ADD PRIMARY KEY (`type`);
-
---
--- Indices de la tabla `role_permission`
---
-ALTER TABLE `role_permission`
- ADD PRIMARY KEY (`role_type`,`permission_resource`), ADD KEY `fk_role_permission_role1_idx` (`role_type`), ADD KEY `fk_role_permission_permission1_idx` (`permission_resource`);
-
---
--- Indices de la tabla `user`
---
-ALTER TABLE `user`
- ADD PRIMARY KEY (`id`), ADD KEY `fk_user_role_idx` (`role_type`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `menu`
---
-ALTER TABLE `menu`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
---
--- AUTO_INCREMENT de la tabla `node`
---
-ALTER TABLE `node`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT de la tabla `node_type`
---
-ALTER TABLE `node_type`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `user`
---
-ALTER TABLE `user`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- Restricciones para tablas volcadas
 --
@@ -296,27 +238,27 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- Filtros para la tabla `menu`
 --
 ALTER TABLE `menu`
-ADD CONSTRAINT `fk_menu_node1` FOREIGN KEY (`node_id`) REFERENCES `node` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_menu_node1` FOREIGN KEY (`node_id`) REFERENCES `node` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `node`
 --
 ALTER TABLE `node`
-ADD CONSTRAINT `fk_node_node_type1` FOREIGN KEY (`node_type_id`) REFERENCES `node_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_node_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_node_node_type1` FOREIGN KEY (`node_type_id`) REFERENCES `node_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_node_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `role_permission`
 --
 ALTER TABLE `role_permission`
-ADD CONSTRAINT `fk_role_permission_permission1` FOREIGN KEY (`permission_resource`) REFERENCES `permission` (`resource`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_role_permission_role1` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_role_permission_role1` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_role_permission_permission1` FOREIGN KEY (`permission_resource`) REFERENCES `permission` (`resource`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `user`
 --
 ALTER TABLE `user`
-ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_type`) REFERENCES `role` (`type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
